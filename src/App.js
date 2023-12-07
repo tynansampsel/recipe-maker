@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, useRef } from 'react';
+import generatePDF from 'react-to-pdf';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css';
+import Generic from './Generic';
+import Page from './Page';
+import FieldIngredient from './FieldIngredient';
+
+
+class App extends Component {
+	constructor(props) {
+		super(props);
+
+		// Create a ref and assign it to an instance variable
+		this.targetRef = React.createRef();
+	}
+
+	componentDidMount() {
+		// Access the DOM node using the ref after the component has mounted
+		if (this.targetRef.current) {
+			this.targetRef.current.focus();
+		}
+	}
+
+	render() {
+		return (
+			<div className="App">
+				<header className="App-header">
+					<button onClick={() => generatePDF(this.targetRef, { filename: 'page.pdf' })}>Download PDF</button>
+					<div ref={this.targetRef}>
+						<input
+							className="FieldPreTime"
+							type="text"
+						/>
+						<input
+							className="FieldCookTime"
+							type="text"
+						/>
+						
+						<div className="FieldIngredientContainer">
+							<FieldIngredient />
+							<FieldIngredient />
+							<FieldIngredient />
+							<FieldIngredient />
+						</div>
+					</div>
+					{/* <Page ref={this.targetRef} /> */}
+				</header>
+			</div>
+		);
+	}
 }
 
 export default App;
